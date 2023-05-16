@@ -1,24 +1,11 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { useFetchImage, useFetchInfoData } from "../hooks/SliderHooks";
+
 const Slider = () => {
-  const [image, setImage] = useState([]);
+  const { image, loading: imageLoading } = useFetchImage();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [info, setInfo] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get(
-          "https://api.consumet.org/anime/gogoanime/top-airing",
-          { params: { page: 1 } }
-        );
-        setImage(data.results);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
+  const info = useFetchInfoData(image, currentSlide);
 
   const nextSlide = () => {
     setCurrentSlide((prevSlide) =>
@@ -38,21 +25,7 @@ const Slider = () => {
       return str;
     }
   };
-  useEffect(() => {
-    const fetchInfo = async () => {
-      try {
-        if (image[currentSlide]) {
-          const { data } = await axios.get(
-            `https://api.consumet.org/anime/gogoanime/info/${image[currentSlide].id}`
-          );
-          setInfo(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchInfo();
-  }, [currentSlide, image]);
+
   return (
     <div className="relative w-full ">
       <div className="relative h-56 overflow-hidden md:h-96">
