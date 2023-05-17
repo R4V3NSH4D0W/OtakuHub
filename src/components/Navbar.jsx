@@ -9,6 +9,11 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
+    if (!isMenuOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
   };
 
   return (
@@ -46,7 +51,7 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search..."
-            className="h-8 pl-2 pr-8 w-[13rem] lg:w-[15rem] rounded"
+            className="h-8 pl-2 pr-8 w-[13rem] lg:w-[15rem] rounded focus:outline-none"
           />
           <FaSearch className="absolute right-2 md:right-14 lg:right-3 top-1/2 transform -translate-y-1/2 text-black" />
         </div>

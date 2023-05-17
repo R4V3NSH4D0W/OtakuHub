@@ -1,18 +1,32 @@
 import React, { useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useFetchImage, useFetchInfoData } from "../hooks/SliderHooks";
-
+import { useRef } from "react";
+import { Link } from "react-router-dom";
 const Slider = () => {
   const { image, loading: imageLoading } = useFetchImage();
   const [currentSlide, setCurrentSlide] = useState(0);
   const info = useFetchInfoData(image, currentSlide);
-
+  const touchStartX = useRef(null);
   const nextSlide = () => {
     setCurrentSlide((prevSlide) =>
       prevSlide === image.length - 1 ? 0 : prevSlide + 1
     );
   };
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0].clientX;
+  };
 
+  const handleTouchEnd = (event) => {
+    const touchEndX = event.changedTouches[0].clientX;
+    const touchThreshold = 50;
+
+    if (touchStartX.current - touchEndX > touchThreshold) {
+      nextSlide();
+    } else if (touchEndX - touchStartX.current > touchThreshold) {
+      prevSlide();
+    }
+  };
   const prevSlide = () => {
     setCurrentSlide((prevSlide) =>
       prevSlide === 0 ? image.length - 1 : prevSlide - 1
@@ -28,56 +42,62 @@ const Slider = () => {
 
   return (
     <div className="relative w-full ">
-      <div className="relative h-56 overflow-hidden md:h-96">
+      <div
+        className="relative h-[16rem]   overflow-hidden md:h-96"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {image.map((item, index) => (
-          <div
-            key={item.id}
-            className={`duration-700 ease-in-out ${
-              currentSlide === index ? "block" : "hidden"
-            }`}
-          >
-            <img
-              src={item.image}
-              className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2  left-1/2 blur-sm lg:blur-lg opacity-50  "
-              alt="..."
-            />
+          <Link to={`/info/${item?.id}`} key={item?.id}>
             <div
-              className=" text-white relative  flex justify-between m-4 lg:m-5 lg:mr-40 lg:ml-40"
               key={item.id}
+              className={`duration-700 ease-in-out ${
+                currentSlide === index ? "block" : "hidden"
+              }`}
             >
-              <div className="flex flex-col" key={item.id}>
-                <span className=" text-sm font-black lg:text-3xl ">
-                  {truncateString(item.title, 35)}
-                </span>
-                <div className=" text-sm w-[15rem] lg:w-full lg:text-base">
-                  {item.genres.join(", ")}
-                </div>
-                <span className=" font-bold text-sm lg:text-xl">summary</span>
-                <p className=" text-[0.8rem] w-[15rem] lg:hidden ">
-                  {truncateString(info.description, 100)}
-                </p>
-                <p className=" text-sm w-[45rem] hidden  lg:block ">
-                  {info.description}
-                </p>
-                <p className=" text-[0.8rem] lg:text-sm font-bold">
-                  Status: {info.status}
-                </p>
-                <p className=" text-[0.8rem] lg:text-sm font-bold">
-                  Release Date: {info.releaseDate}
-                </p>
-                {/* <span className=" bg-gray-500 w-[40%] lg:w-[14%] items-center px-2 py-1 mt-2 cursor-pointer rounded hover:bg-gray-400 text-sm lg:text-md font-bold">
+              <img
+                src={item.image}
+                className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2  left-1/2 blur-sm lg:blur-lg opacity-50  "
+                alt="..."
+              />
+              <div
+                className=" text-white relative  flex justify-between m-4 lg:m-7 lg:mr-40 lg:ml-40"
+                key={item.id}
+              >
+                <div className="flex flex-col" key={item.id}>
+                  <span className=" text-sm font-black lg:text-3xl ">
+                    {truncateString(item.title, 35)}
+                  </span>
+                  <div className=" text-sm w-[15rem] lg:w-full lg:text-base">
+                    {item.genres.join(", ")}
+                  </div>
+                  <span className=" font-bold text-sm lg:text-xl">summary</span>
+                  <p className=" text-[0.8rem] w-[15rem] lg:hidden ">
+                    {truncateString(info.description, 100)}
+                  </p>
+                  <p className=" text-sm w-[45rem] hidden  lg:block ">
+                    {info.description}
+                  </p>
+                  <p className=" text-[0.8rem] lg:text-sm font-bold">
+                    Status: {info.status}
+                  </p>
+                  <p className=" text-[0.8rem] lg:text-sm font-bold">
+                    Release Date: {info.releaseDate}
+                  </p>
+                  {/* <span className=" bg-gray-500 w-[40%] lg:w-[14%] items-center px-2 py-1 mt-2 cursor-pointer rounded hover:bg-gray-400 text-sm lg:text-md font-bold">
                   Watch Now
                 </span> */}
-              </div>
-              <div className="mr-4">
-                <img
-                  className=" h-[8rem] lg:h-[20rem]"
-                  src={item?.image}
-                  alt={item?.id}
-                />
+                </div>
+                <div className="mr-4">
+                  <img
+                    className=" h-[8rem] lg:h-[20rem]"
+                    src={item?.image}
+                    alt={item?.id}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
