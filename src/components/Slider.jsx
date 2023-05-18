@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { useFetchImage, useFetchInfoData } from "../hooks/SliderHooks";
+import { useFetchImage } from "../hooks/SliderHooks";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 const Slider = () => {
   const { image, loading: imageLoading } = useFetchImage();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const info = useFetchInfoData(image, currentSlide);
+
   const touchStartX = useRef(null);
   const nextSlide = () => {
     setCurrentSlide((prevSlide) =>
@@ -48,7 +48,11 @@ const Slider = () => {
         onTouchEnd={handleTouchEnd}
       >
         {image.map((item, index) => (
-          <Link to={`/info/${item?.id}`} key={item?.id}>
+          <Link
+            to={`/info/${item?.id}`}
+            key={item?.id}
+            state={{ request: item.attributes }}
+          >
             <div
               key={item.id}
               className={`duration-700 ease-in-out ${
@@ -56,7 +60,7 @@ const Slider = () => {
               }`}
             >
               <img
-                src={item.image}
+                src={item?.attributes?.coverImage?.original}
                 className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2  left-1/2 blur-sm lg:blur-lg opacity-50  "
                 alt="..."
               />
@@ -66,23 +70,23 @@ const Slider = () => {
               >
                 <div className="flex flex-col" key={item.id}>
                   <span className=" text-sm font-black lg:text-3xl ">
-                    {truncateString(item.title, 35)}
+                    {truncateString(item?.attributes?.titles?.en_jp, 35)}
                   </span>
                   <div className=" text-sm w-[15rem] lg:w-full lg:text-base">
-                    {item.genres.join(", ")}
+                    {/* {item.genres.join(", ")} */}
                   </div>
                   <span className=" font-bold text-sm lg:text-xl">summary</span>
                   <p className=" text-[0.8rem] w-[15rem] lg:hidden ">
-                    {truncateString(info.description, 100)}
+                    {truncateString(item?.attributes?.description, 100)}
                   </p>
                   <p className=" text-sm w-[45rem] hidden  lg:block ">
-                    {info.description}
+                    {truncateString(item?.attributes?.description, 600)}
                   </p>
                   <p className=" text-[0.8rem] lg:text-sm font-bold">
-                    Status: {info.status}
+                    Status: {item?.attributes?.status}
                   </p>
                   <p className=" text-[0.8rem] lg:text-sm font-bold">
-                    Release Date: {info.releaseDate}
+                    Release Date: {item?.attributes?.startDate}
                   </p>
                   {/* <span className=" bg-gray-500 w-[40%] lg:w-[14%] items-center px-2 py-1 mt-2 cursor-pointer rounded hover:bg-gray-400 text-sm lg:text-md font-bold">
                   Watch Now
@@ -91,7 +95,7 @@ const Slider = () => {
                 <div className="mr-4">
                   <img
                     className=" h-[8rem] lg:h-[20rem]"
-                    src={item?.image}
+                    src={item?.attributes?.posterImage?.original}
                     alt={item?.id}
                   />
                 </div>

@@ -5,3 +5,4 @@ const request = {
   requestnewSeason: `https://api.consumet.org/anime/gogoanime/new-season`,
 };
 export default request;
+// to fetch upcoming https://kitsu.io/api/edge/anime?sort=-startDate&page[limit]=8

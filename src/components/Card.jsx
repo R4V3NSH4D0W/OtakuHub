@@ -1,41 +1,51 @@
-import React from "react";
-import {
-  useFetchImageData,
-  useFetchRankingIds,
-  useFetchTopAnime,
-} from "../hooks/CustomHooks";
+import React, { useState, useEffect, useMemo } from "react";
 import nothing from "../assets/nothing.gif";
 import { TopRank } from "./TopRank";
 import { Link } from "react-router-dom";
-const Card = ({ name, URL }) => {
-  const { image, loading: imageLoading } = useFetchImageData(URL);
-  const rank = useFetchRankingIds();
-  const { topAnime, loading: topAnimeLoading } = useFetchTopAnime(rank);
-  const slug = anime?.data?.attributes?.slug;
-  const title = anime?.data?.attributes?.titles?.en_jp;
+import axios from "axios";
 
-  const truncateString = (str, num) => {
-    if (str?.length > num) {
-      return str.slice(0, num) + "...";
-    } else {
-      return str;
-    }
-  };
+const Card = ({ name }) => {
+  const [anime, setAnime] = useState([]);
+  useEffect(() => {
+    const fetchAnime = async () => {
+      try {
+        const data = await axios.get(
+          `https://kitsu.io/api/edge/anime?sort=-updatedAt&page[limit]=8`
+        );
+        setAnime(data?.data?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchAnime();
+  }, []);
+  console.log(anime);
+  const truncateString = useMemo(
+    () => (str, num) => {
+      if (str?.length > num) {
+        return str.slice(0, num) + "...";
+      } else {
+        return str;
+      }
+    },
+    []
+  );
 
-  if (imageLoading || topAnimeLoading) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <img src={nothing} alt="loading" />
-      </div>
-    );
-  }
+  // if (imageLoading || topAnimeLoading) {
+  //   return (
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         height: "100vh",
+  //       }}
+  //     >
+  //       <img src={nothing} alt="loading" />
+  //     </div>
+  //   );
+  // }
+
   return (
     <>
       <div className=" lg:flex  lg:flex-row lg:gap-4">
@@ -44,29 +54,32 @@ const Card = ({ name, URL }) => {
           <hr />
           <div className="mt-2  lg:bg-zinc-800">
             <div className="flex flex-wrap lg:p-4">
-              {image.map((lists) => (
+              {anime.map((lists) => (
                 <div
                   className=" relative w-1/2 p-2 lg:w-1/4 cursor-pointer lg:hover:scale-105 "
                   key={lists?.id}
                 >
-                  <Link to={`/info/${lists?.id}`}>
+                  <Link
+                    to={`/info/${lists?.id}`}
+                    state={{ request: lists?.attributes }}
+                  >
                     <img
-                      src={lists?.image}
+                      src={lists?.attributes?.posterImage?.original}
                       className="w-full h-[15rem] object-cover lg:h-[20rem] "
                     />
                   </Link>
                   <p className="absolute bottom-4 pl-2 text-white font-bold overflow-x-hidden">
-                    {truncateString(lists?.title, 20)}
+                    {truncateString(lists?.attributes?.titles?.en_jp, 20)}
                   </p>
                 </div>
               ))}
             </div>
           </div>
         </div>
-        <TopRank topAnime={topAnime} />
+        <TopRank />
       </div>
     </>
   );
 };
 
-export default Card;
+export default React.memo(Card);
