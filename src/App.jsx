@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import InfoModel from "./components/InfoModel";
 import Watch from "./components/Watch";
 import Lists from "./components/Lists";
+import SearchResults from "./components/SearchResults";
 const App = () => {
   return (
     <>
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="watch/" element={<Watch />} />
         <Route path="/TopAnime" element={<Lists />} />
         <Route path="/Movies" element={<Lists />} />
+        <Route path="/search" element={<SearchResults />} />
       </Routes>
     </>
   );

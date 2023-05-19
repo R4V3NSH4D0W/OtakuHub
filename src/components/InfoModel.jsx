@@ -8,7 +8,7 @@ import axios from "axios";
 const InfoModel = () => {
   const { id } = useParams(); // Correctly assign the value of the route parameter
   console.log(id);
-
+  const [imageError, setImageError] = useState(false);
   const location = useLocation();
   const [genres, setGenres] = useState([]);
   const anime = location.state.request;
@@ -45,17 +45,30 @@ const InfoModel = () => {
       console.log(error);
     }
   };
+  const handleImageError = () => {
+    setImageError(true);
+  };
+  const originalImage = anime?.coverImage?.original;
   return (
     <>
       <div className="flex text-white flex-col lg:flex-row">
         <div className="flex w-full">
           <div className="relative w-full h-[35rem] lg:h-[30rem]">
             {/* <!-- Image --> */}
-            <img
-              src={anime?.coverImage?.original}
-              alt="cover"
-              className="w-full h-full object-cover blur brightness-50"
-            />
+            {originalImage && !imageError ? (
+              <img
+                src={originalImage}
+                alt="cover"
+                className="w-full h-full object-cover blur brightness-50"
+                onError={handleImageError}
+              />
+            ) : (
+              <img
+                src="https://w.wallhaven.cc/full/we/wallhaven-welokx.png"
+                alt="Alternative Image"
+                className="w-full h-full object-cover blur brightness-50"
+              />
+            )}
             {/* <!-- Poster Image --> */}
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 lg:left-0 lg:top-0 p-4 h-[14rem] w-[12rem] lg:translate-x-0">
               <img

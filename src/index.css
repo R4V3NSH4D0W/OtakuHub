@@ -6,3 +6,11 @@ body{
   background-color: #454545;
   font-family: 'Lato','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+/* darkMode.css */
+@media (prefers-color-scheme: dark) {
+  /* Add your dark mode styles here */
+  body {
+    background-color: #1a202c;
+    color: #f8f8f8;
+  }
+}

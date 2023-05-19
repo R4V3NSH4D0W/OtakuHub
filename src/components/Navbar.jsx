@@ -5,14 +5,24 @@ import { BsFillMoonStarsFill } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import request from "../Request";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const Navbar = () => {
+  const navigate = useNavigate();
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const Lists = [
     { name: "Home" },
     { name: "TopAnime", requestData: request.requestWeeklyPopular },
     { name: "Movies", requestData: request.requestMovie },
   ];
-
+  const handleInputChange = (event) => {
+    setSearch(event.target.value);
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    navigate(`/search?q=${search}`);
+  };
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
     if (!isMenuOpen) {
@@ -25,9 +35,18 @@ const Navbar = () => {
     toggleMenu(); // Close the menu
     // Add any additional logic for handling menu item click here
   };
+  const [darkMode, setDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
   return (
     <>
-      <nav className="bg-purple-600 h-[4rem] w-full flex items-center p-2 lg:p-8 lg:bg-black">
+      <nav
+        className={`bg-purple-600 h-[4rem] w-full flex items-center p-2 lg:p-8 lg:bg-black  ${
+          darkMode ? "lg:dark:bg-white" : ""
+        } `}
+      >
         <div className=" lg:hidden">
           <button
             className="text-white text-3xl font-black flex items-center"
@@ -58,37 +77,48 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-1 ">
-          <img
-            src={logo}
-            className="rounded-full h-9 bg-black lg:bg-gray-700 overflow-hidden"
-            alt="logo"
-          />
-          <span className=" text-white ml-3 font-black text-2xl hidden lg:block">
-            Otaku Hub
-          </span>
+          <Link to={`/Home`}>
+            <img
+              src={logo}
+              className="rounded-full h-9 bg-black lg:bg-gray-700 overflow-hidden"
+              alt="logo"
+            />
+          </Link>
+          <Link to={`/Home`}>
+            <span className=" text-white ml-3 font-black text-2xl hidden lg:block">
+              Otaku Hub
+            </span>
+          </Link>
         </div>
         <div className="flex flex-1 lg:flex-none pl-5 relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="h-8 pl-2 pr-8 w-[13rem] lg:w-[15rem] rounded focus:outline-none"
-          />
-          <FaSearch className="absolute right-2 md:right-14 lg:right-3 top-1/2 transform -translate-y-1/2 text-black" />
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              value={search}
+              onChange={handleInputChange}
+              placeholder="Search..."
+              className="h-8 pl-2 pr-8 w-[13rem] lg:w-[15rem] rounded focus:outline-none text-black"
+            />
+            <FaSearch className="absolute right-2 md:right-14 lg:right-3 top-1/2 transform -translate-y-1/2 text-black" />
+          </form>
         </div>
 
         <div className="flex flex-1 lg:flex-none text-white pl-4">
-          <BsFillMoonStarsFill className=" hover:text-gray-200 cursor-pointer" />
+          <BsFillMoonStarsFill
+            className=" hover:text-gray-200 cursor-pointer"
+            onClick={toggleDarkMode}
+          />
         </div>
       </nav>
       <div className=" bg-purple-600 h-10 pt-1 items-center hidden lg:block">
         <div className="pl-[2rem] flex gap-4 text-white text-md font-bold">
-          {Lists.map((lists) => (
+          {Lists.map((lists, index) => (
             <Link
               to={`/${lists.name}`}
               state={{ requestData: lists.requestData }}
-              key={lists?.id}
+              key={index}
             >
-              <span key={lists.name}>{lists.name}</span>
+              <span key={lists?.id}>{lists.name}</span>
             </Link>
           ))}
         </div>
