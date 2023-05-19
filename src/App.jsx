@@ -4,14 +4,18 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import InfoModel from "./components/InfoModel";
 import Watch from "./components/Watch";
+import Lists from "./components/Lists";
 const App = () => {
   return (
     <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/Home" element={<Home />} />
         <Route path="/info/:id" element={<InfoModel />} />
-        <Route path="watch/:id" element={<Watch />} />
+        <Route path="watch/" element={<Watch />} />
+        <Route path="/TopAnime" element={<Lists />} />
+        <Route path="/Movies" element={<Lists />} />
       </Routes>
     </>
   );

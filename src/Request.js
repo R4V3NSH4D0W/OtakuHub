@@ -1,8 +1,8 @@
 const request = {
-  requestTrending: `https://api.consumet.org/anime/gogoanime/top-airing`,
-  requestEpisodes: `https://api.consumet.org/anime/gogoanime/recent-episodes`,
-  requestMovie: `https://api.consumet.org/anime/gogoanime/movie`,
-  requestnewSeason: `https://api.consumet.org/anime/gogoanime/new-season`,
+  requestMovie:
+    "https://kitsu.io/api/edge/anime?filter[subtype]=movie&sort=-startDate",
+  requestWeeklyPopular:
+    "https://kitsu.io/api/edge/anime?sort=-userCount&filter[status]=current&filter[seasonYear]=2023&filter[season]=spring",
 };
 export default request;
-// to fetch upcoming https://kitsu.io/api/edge/anime?sort=-startDate&page[limit]=8
+// to https://kitsu.io/api/edge/anime?sort=-startDate&page[limit]=8

@@ -3,9 +3,15 @@ import { AiOutlineMenu } from "react-icons/ai";
 import logo from "../assets/logo.png";
 import { BsFillMoonStarsFill } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import request from "../Request";
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const Lists = [{ name: "Home" }, { name: "Top Anime" }, { name: "Movies" }];
+  const Lists = [
+    { name: "Home" },
+    { name: "TopAnime", requestData: request.requestWeeklyPopular },
+    { name: "Movies", requestData: request.requestMovie },
+  ];
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -15,7 +21,10 @@ const Navbar = () => {
       document.body.classList.remove("overflow-hidden");
     }
   };
-
+  const handleMenuItemClick = () => {
+    toggleMenu(); // Close the menu
+    // Add any additional logic for handling menu item click here
+  };
   return (
     <>
       <nav className="bg-purple-600 h-[4rem] w-full flex items-center p-2 lg:p-8 lg:bg-black">
@@ -30,7 +39,18 @@ const Navbar = () => {
             <div className="absolute left-0 w-full h-full mt-4 bg-gray-600 opacity-80 text-white z-10  ">
               {Lists.map((list) => (
                 <div className="px-4 py-2  hover:bg-gray-500" key={list.name}>
-                  <span className="pl-2 hover:text-white">{list.name}</span>
+                  <Link
+                    to={`/${list.name}`}
+                    state={{ requestData: list.requestData }}
+                    key={list?.id}
+                  >
+                    <span
+                      className="pl-2 hover:text-white"
+                      onClick={handleMenuItemClick}
+                    >
+                      {list.name}
+                    </span>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -63,7 +83,13 @@ const Navbar = () => {
       <div className=" bg-purple-600 h-10 pt-1 items-center hidden lg:block">
         <div className="pl-[2rem] flex gap-4 text-white text-md font-bold">
           {Lists.map((lists) => (
-            <span key={lists.name}>{lists.name}</span>
+            <Link
+              to={`/${lists.name}`}
+              state={{ requestData: lists.requestData }}
+              key={lists?.id}
+            >
+              <span key={lists.name}>{lists.name}</span>
+            </Link>
           ))}
         </div>
       </div>

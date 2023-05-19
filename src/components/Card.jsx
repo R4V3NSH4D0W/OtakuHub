@@ -6,6 +6,7 @@ import axios from "axios";
 
 const Card = ({ name }) => {
   const [anime, setAnime] = useState([]);
+  const [loading, setloading] = useState(true);
   useEffect(() => {
     const fetchAnime = async () => {
       try {
@@ -13,8 +14,10 @@ const Card = ({ name }) => {
           `https://kitsu.io/api/edge/anime?sort=-updatedAt&page[limit]=8`
         );
         setAnime(data?.data?.data);
+        setloading(false);
       } catch (error) {
         console.log(error);
+        setloading(false);
       }
     };
     fetchAnime();
@@ -31,20 +34,20 @@ const Card = ({ name }) => {
     []
   );
 
-  // if (imageLoading || topAnimeLoading) {
-  //   return (
-  //     <div
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         alignItems: "center",
-  //         height: "100vh",
-  //       }}
-  //     >
-  //       <img src={nothing} alt="loading" />
-  //     </div>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <img src={nothing} alt="loading" />
+      </div>
+    );
+  }
 
   return (
     <>

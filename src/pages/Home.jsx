@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <>
       <Slider />
-      <Card name="Anime" />
+      <Card name="Random Anime" />
       {/* <Row rowID="1" title="New Season" URL={request.requestnewSeason} /> */}
       {/* <Row rowID="2" title="New Episodes" URL={request.requestEpisodes} /> */}
     </>

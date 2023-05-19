@@ -4,15 +4,18 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 export const TopRank = () => {
   const [topAnime, setTopAnime] = useState([]);
+  const [loading, setloading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       const data = await axios.get(
         `https://kitsu.io/api/edge/anime?sort=popularityRank&page[limit]=7`
       );
       setTopAnime(data?.data?.data);
+      setloading(false);
       try {
       } catch (error) {
         console.log(error);
+        setloading(false);
       }
     };
     fetchData();

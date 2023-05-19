@@ -61,7 +61,7 @@ const Slider = () => {
             >
               <img
                 src={item?.attributes?.coverImage?.original}
-                className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2  left-1/2 blur-sm lg:blur-lg opacity-50  "
+                className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2  left-1/2 blur-sm lg:blur-lg opacity-50 h-full object-cover "
                 alt="..."
               />
               <div
