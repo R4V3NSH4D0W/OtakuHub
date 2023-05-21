@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import logo from "../assets/logo.png";
 import { BsFillMoonStarsFill } from "react-icons/bs";
@@ -6,6 +6,7 @@ import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import request from "../Request";
 import { useNavigate } from "react-router-dom";
+import { FaChevronDown } from "react-icons/fa";
 import axios from "axios";
 const Navbar = () => {
   const navigate = useNavigate();
@@ -31,6 +32,9 @@ const Navbar = () => {
       document.body.classList.remove("overflow-hidden");
     }
   };
+  const handleMenuToggle = () => {
+    setMenuOpen(!isMenuOpen);
+  };
   const handleMenuItemClick = () => {
     toggleMenu(); // Close the menu
     // Add any additional logic for handling menu item click here
@@ -40,6 +44,26 @@ const Navbar = () => {
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
+  const [genres, setGenres] = useState([]);
+  const [limit, setLimit] = useState(4);
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const response = await axios.get(
+          `https://kitsu.io/api/edge/genres?page[limit]=15`
+        );
+        setGenres(response?.data?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchGenres();
+  }, []);
+  console.log(genres);
+  const handleSeeMore = () => {
+    setLimit((prevLimit) => prevLimit + 4);
+  };
+
   return (
     <>
       <nav
@@ -94,12 +118,16 @@ const Navbar = () => {
           <form onSubmit={handleSubmit}>
             <input
               type="text"
-              value={search}
               onChange={handleInputChange}
               placeholder="Search..."
               className="h-8 pl-2 pr-8 w-[13rem] lg:w-[15rem] rounded focus:outline-none text-black"
             />
-            <FaSearch className="absolute right-2 md:right-14 lg:right-3 top-1/2 transform -translate-y-1/2 text-black" />
+            <button type="submit">
+              <FaSearch
+                type="submit"
+                className="absolute right-2 md:right-14 lg:right-3 top-1/2 transform -translate-y-1/2 text-black"
+              />
+            </button>
           </form>
         </div>
 
@@ -121,6 +149,31 @@ const Navbar = () => {
               <span key={lists?.id}>{lists.name}</span>
             </Link>
           ))}
+          <div
+            className=" relative flex items-center gap-2 cursor-pointer"
+            onClick={handleMenuToggle}
+          >
+            <span>Filter</span>
+            <FaChevronDown className="mt-2" />
+            {isMenuOpen && (
+              /* Render your menu component here */
+              <div className="absolute top-[2.3rem] left-0 bg-zinc-900 rounded-b z-10 opacity-80">
+                {/* Genres filter */}
+                <div className="flex flex-wrap w-[18rem] gap-2 m-4 ">
+                  {genres.map((genre) => (
+                    <span key={genre?.id} className=" border rounded p-1 ">
+                      {genre?.attributes?.name}
+                    </span>
+                  ))}
+                </div>
+                <div className=" flex justify-center ">
+                  <button className=" bg-purple-600 w-full h-10 rounded-b">
+                    See More
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>

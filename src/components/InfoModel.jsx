@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Recommended from "./Recommended";
 const InfoModel = () => {
   const { id } = useParams(); // Correctly assign the value of the route parameter
   console.log(id);
@@ -130,6 +131,7 @@ const InfoModel = () => {
           </div>
         </div>
       </div>
+      {/* <Recommended animeId={id} /> */}
     </>
   );
 };

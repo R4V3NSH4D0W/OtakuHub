@@ -11,7 +11,7 @@ const Card = ({ name }) => {
     const fetchAnime = async () => {
       try {
         const data = await axios.get(
-          `https://kitsu.io/api/edge/anime?sort=-updatedAt&page[limit]=8`
+          `https://kitsu.io/api/edge/anime?sort=ratingRank&sortDirection=asc&page[limit]=8`
         );
         setAnime(data?.data?.data);
         setloading(false);
@@ -67,7 +67,7 @@ const Card = ({ name }) => {
                     state={{ request: lists?.attributes }}
                   >
                     <img
-                      src={lists?.attributes?.posterImage?.original}
+                      src={lists?.attributes?.posterImage?.large}
                       className="w-full h-[15rem] object-cover lg:h-[20rem] "
                     />
                   </Link>
