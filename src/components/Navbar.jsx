@@ -149,31 +149,6 @@ const Navbar = () => {
               <span key={lists?.id}>{lists.name}</span>
             </Link>
           ))}
-          <div
-            className=" relative flex items-center gap-2 cursor-pointer"
-            onClick={handleMenuToggle}
-          >
-            <span>Filter</span>
-            <FaChevronDown className="mt-2" />
-            {isMenuOpen && (
-              /* Render your menu component here */
-              <div className="absolute top-[2.3rem] left-0 bg-zinc-900 rounded-b z-10 opacity-80">
-                {/* Genres filter */}
-                <div className="flex flex-wrap w-[18rem] gap-2 m-4 ">
-                  {genres.map((genre) => (
-                    <span key={genre?.id} className=" border rounded p-1 ">
-                      {genre?.attributes?.name}
-                    </span>
-                  ))}
-                </div>
-                <div className=" flex justify-center ">
-                  <button className=" bg-purple-600 w-full h-10 rounded-b">
-                    See More
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </>
