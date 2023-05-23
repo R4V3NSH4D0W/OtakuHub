@@ -94,8 +94,8 @@ const Slider = () => {
                 </div>
                 <div className="mr-4">
                   <img
-                    className=" h-[8rem] md:h-[16rem] lg:h-[20rem]"
-                    src={item?.attributes?.posterImage?.original}
+                    className=" h-[10rem] md:h-[15rem] md:w-[12rem] lg:h-[20rem] lg:w-[14rem] object-cover"
+                    src={item?.attributes?.posterImage?.large}
                     alt={item?.id}
                   />
                 </div>

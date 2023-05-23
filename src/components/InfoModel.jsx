@@ -5,15 +5,13 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Recommended from "./Recommended";
+import Episodes from "./Episodes";
 const InfoModel = () => {
-  const { id } = useParams(); // Correctly assign the value of the route parameter
-  console.log(id);
+  const { id } = useParams();
   const [imageError, setImageError] = useState(false);
   const location = useLocation();
   const [genres, setGenres] = useState([]);
   const anime = location.state.request;
-  console.log(anime);
 
   const slug = anime?.slug;
   const title = anime?.titles?.en_jp;
@@ -34,7 +32,6 @@ const InfoModel = () => {
 
     fetchRelatedGenres();
   }, [id]);
-  console.log(genres);
   //fetch genres Name Through ID
   const fetchGenreName = async (genreId) => {
     try {
@@ -50,6 +47,7 @@ const InfoModel = () => {
     setImageError(true);
   };
   const originalImage = anime?.coverImage?.original;
+
   return (
     <>
       <div className="flex text-white flex-col lg:flex-row">
@@ -71,16 +69,16 @@ const InfoModel = () => {
               />
             )}
             {/* <!-- Poster Image --> */}
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 lg:left-0 lg:top-0 p-4 h-[14rem] w-[12rem] lg:translate-x-0">
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 lg:left-0 lg:top-0 p-4 h-[16rem] w-[12rem] lg:h-[18rem] lg:w-[14rem] object-cover lg:translate-x-0">
               <img
                 src={anime?.posterImage?.large}
                 className="h-full w-full object-cover"
               />
             </div>
             {/* <!-- Information Block --> */}
-            <div className="absolute top-2 pt-[12rem] pl-4 lg:top-3 lg:pl-[12rem] lg:pt-0 flex flex-col lg:flex-row">
+            <div className="absolute top-2 pt-[12rem] pl-4 lg:top-4 lg:pl-[12rem] lg:pt-0 flex flex-col lg:flex-row">
               {/* <!-- Left Section (Title, Buttons, Description) --> */}
-              <div className="flex flex-col items-center lg:items-start lg:w-[70%]">
+              <div className="flex flex-col items-center lg:items-start pt-6 lg:pl-8 lg:pt-0 lg:w-[70%]">
                 <span className="font-bold text-2xl pt-4">
                   {anime?.titles?.en_jp}
                 </span>
@@ -88,7 +86,11 @@ const InfoModel = () => {
                   {/* <!-- Watch Now Button --> */}
                   <Link
                     to={`/watch/`}
-                    state={{ requestSlug: slug, requestTitle: title }}
+                    state={{
+                      requestSlug: slug,
+                      requestTitle: title,
+                      episodeIndex: 1,
+                    }}
                   >
                     <button className="bg-purple-600 w-[6rem] rounded-lg h-10 hover:bg-purple-500 items-center">
                       Watch Now
@@ -131,7 +133,7 @@ const InfoModel = () => {
           </div>
         </div>
       </div>
-      {/* <Recommended animeId={id} /> */}
+      <Episodes slug={slug} title={title} />
     </>
   );
 };

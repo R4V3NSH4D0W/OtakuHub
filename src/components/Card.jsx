@@ -59,7 +59,7 @@ const Card = ({ name }) => {
             <div className="flex flex-wrap lg:p-4">
               {anime.map((lists) => (
                 <div
-                  className=" relative w-1/2 p-2 lg:w-1/4 cursor-pointer lg:hover:scale-105 "
+                  className=" relative w-1/2 p-2 lg:w-1/4 md:w-1/3 cursor-pointer lg:hover:scale-105 "
                   key={lists?.id}
                 >
                   <Link
